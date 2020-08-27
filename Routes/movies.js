@@ -69,7 +69,7 @@ router.get('/genre', verifyToken, (req, res) => {
     .catch((err) => console.log(err));
 });
 
-/*router.get("/getmovie/:movieId", verifyToken, verifyLoginToken, (req, res) => {
+router.get("/getmovie/:movieId", (req, res) => {
   const movieId = req.params.movieId;
   fetch(
     `https://api.themoviedb.org/3/movie/${movieId}?api_key=${
@@ -81,7 +81,49 @@ router.get('/genre', verifyToken, (req, res) => {
       return res.status(200).send(result);
     })
     .catch(err => console.log(err));
-});*/
+});
+
+router.get("/getmovie/:movieId/videos", (req, res) => {
+  const movieId = req.params.movieId;
+  fetch(
+    `https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${
+      process.env.API_KEY
+    }`
+  )
+    .then(response => response.json())
+    .then(result => {
+      return res.status(200).send(result);
+    })
+    .catch(err => console.log(err));
+});
+
+router.get("/getmovie/:movieId/credits", (req, res) => {
+  const movieId = req.params.movieId;
+  fetch(
+    `https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${
+      process.env.API_KEY
+    }`
+  )
+    .then(response => response.json())
+    .then(result => {
+      return res.status(200).send(result);
+    })
+    .catch(err => console.log(err));
+});
+
+router.get("/getmovie/:movieId/images", (req, res) => {
+  const movieId = req.params.movieId;
+  fetch(
+    `https://api.themoviedb.org/3/movie/${movieId}/images?api_key=${
+      process.env.API_KEY
+    }`
+  )
+    .then(response => response.json())
+    .then(result => {
+      return res.status(200).send(result);
+    })
+    .catch(err => console.log(err));
+});
 
 router.get(
   '/getmovies/now_playing',
