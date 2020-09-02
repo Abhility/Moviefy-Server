@@ -32,8 +32,8 @@ function getGenreId(name) {
   }
 }
 
-router.get('/search', verifyToken, (req, res) => {
-  var name = req.headers.name;
+router.get('/search/:query', (req, res) => {
+  var name = req.params.query;
   fetch(
     `https://api.themoviedb.org/3/search/movie?api_key=${process.env.API_KEY}&language=en-US&query=${name}&region=IN`
   )
@@ -56,8 +56,8 @@ router.get('/trending', (req, res) => {
     .catch((err) => console.log(err));
 });
 
-router.get('/genre', verifyToken, (req, res) => {
-  let genre = req.headers.genre;
+router.get('/genre/:name', (req, res) => {
+  let genre = req.params.name;
   const genreId = getGenreId(genre);
   fetch(
     `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.API_KEY}&sort_by=popularity.desc&with_genres=${genreId}&region=IN`
