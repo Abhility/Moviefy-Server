@@ -168,4 +168,60 @@ router.get(
   }
 );
 
+router.get(
+  '/movie/:movieId/watch',
+  (req, res) => {
+    const movieId = req.params.movieId;
+    fetch(
+      `https://api.themoviedb.org/3/movie/${movieId}/watch/providers?api_key=${process.env.API_KEY}`
+    )
+      .then((response) => response.json())
+      .then((result) => {
+        return res.status(200).send(result.results);
+      })
+      .catch((err) => console.log(err));
+  }
+);
+
+router.get(
+  '/movie/:movieId/related',
+  (req, res) => {
+    const movieId = req.params.movieId;
+    fetch(
+      `https://api.themoviedb.org/3/movie/${movieId}/similar?api_key=${process.env.API_KEY}`
+    )
+      .then((response) => response.json())
+      .then((result) => {
+        return res.status(200).send(result.results);
+      })
+      .catch((err) => console.log(err));
+  }
+);
+
+router.get(
+  '/movie/:movieId/socialLinks',
+  (req, res) => {
+    const movieId = req.params.movieId;
+    fetch(
+      `https://api.themoviedb.org/3/movie/${movieId}/external_ids?api_key=${process.env.API_KEY}`
+    )
+      .then((response) => response.json())
+      .then((result) => {
+        delete result.id;
+        result = Object
+          .keys(result)
+          .map(socialLink => (
+            {
+              name: socialLink.split('_')[0],
+              linkId: result[socialLink]
+            }
+          ))
+          .filter(socialLink => !!socialLink.linkId);
+
+        return res.status(200).send(result);
+      })
+      .catch((err) => console.log(err));
+  }
+);
+
 module.exports = router;
