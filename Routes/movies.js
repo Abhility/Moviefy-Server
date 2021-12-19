@@ -33,11 +33,10 @@ function getGenreId(name) {
 }
 
 router.get('/search/:query', (req, res) => {
-  const page = req.query.page || 1;
+  const page = req.query.page || 1 || 1;
   const name = req.params.query;
   fetch(
-    `https://api.themoviedb.org/3/search/movie?api_key=${process.env.API_KEY}
-    &language=en-US&query=${name}&region=IN&page=${page}`
+    `https://api.themoviedb.org/3/search/movie?api_key=${process.env.API_KEY}&language=en-US&query=${name}&region=IN&page=${page}`
   )
     .then((response) => response.json())
     .then((result) => {
@@ -48,10 +47,9 @@ router.get('/search/:query', (req, res) => {
 
 // verifyToken
 router.get('/trending', (req, res) => {
-  const page = req.query.page;
+  const page = req.query.page || 1;
   fetch(
-    `https://api.themoviedb.org/3/trending/movie/day?api_key=${process.env.API_KEY}
-    &region=IN&page=${page}`
+    `https://api.themoviedb.org/3/trending/movie/day?api_key=${process.env.API_KEY}&region=IN&page=${page}`
   )
     .then((response) => response.json())
     .then((result) => {
@@ -61,12 +59,11 @@ router.get('/trending', (req, res) => {
 });
 
 router.get('/genre/:name', (req, res) => {
-  const page = req.query.page;
+  const page = req.query.page || 1;
   let genre = req.params.name;
   const genreId = getGenreId(genre);
   fetch(
-    `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.API_KEY}
-    &sort_by=popularity.desc&with_genres=${genreId}&region=IN&page=${page}`
+    `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.API_KEY}&sort_by=popularity.desc&with_genres=${genreId}&region=IN&page=${page}`
   )
     .then((response) => response.json())
     .then((result) => {
@@ -78,9 +75,7 @@ router.get('/genre/:name', (req, res) => {
 router.get("/getmovie/:movieId", (req, res) => {
   const movieId = req.params.movieId;
   fetch(
-    `https://api.themoviedb.org/3/movie/${movieId}?api_key=${
-      process.env.API_KEY
-    }`
+    `https://api.themoviedb.org/3/movie/${movieId}?api_key=${process.env.API_KEY}`
   )
     .then(response => response.json())
     .then(result => {
@@ -92,9 +87,7 @@ router.get("/getmovie/:movieId", (req, res) => {
 router.get("/getmovie/:movieId/videos", (req, res) => {
   const movieId = req.params.movieId;
   fetch(
-    `https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${
-      process.env.API_KEY
-    }`
+    `https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${process.env.API_KEY}`
   )
     .then(response => response.json())
     .then(result => {
@@ -106,9 +99,7 @@ router.get("/getmovie/:movieId/videos", (req, res) => {
 router.get("/getmovie/:movieId/credits", (req, res) => {
   const movieId = req.params.movieId;
   fetch(
-    `https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${
-      process.env.API_KEY
-    }`
+    `https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${process.env.API_KEY}`
   )
     .then(response => response.json())
     .then(result => {
@@ -120,9 +111,7 @@ router.get("/getmovie/:movieId/credits", (req, res) => {
 router.get("/getmovie/:movieId/images", (req, res) => {
   const movieId = req.params.movieId;
   fetch(
-    `https://api.themoviedb.org/3/movie/${movieId}/images?api_key=${
-      process.env.API_KEY
-    }`
+    `https://api.themoviedb.org/3/movie/${movieId}/images?api_key=${process.env.API_KEY}&include_image_language=en,null`
   )
     .then(response => response.json())
     .then(result => {
@@ -136,10 +125,9 @@ router.get(
   // verifyToken,
   // verifyLoginToken,
   (req, res) => {
-    const page = req.query.page;
+    const page = req.query.page || 1;
     fetch(
-      `https://api.themoviedb.org/3/movie/now_playing?api_key=${process.env.API_KEY}
-      &language=en-US&region=IN&page=${page}`
+      `https://api.themoviedb.org/3/movie/now_playing?api_key=${process.env.API_KEY}&language=en-US&region=IN&page=${page}`
     )
       .then((response) => response.json())
       .then((result) => {
@@ -150,10 +138,9 @@ router.get(
 );
 
 router.get('/getmovies/upcoming', verifyToken, verifyLoginToken, (req, res) => {
-  const page = req.query.page;
+  const page = req.query.page || 1;
   fetch(
-    `https://api.themoviedb.org/3/movie/upcoming?api_key=${process.env.API_KEY}
-     &region=IN&page=${page}`
+    `https://api.themoviedb.org/3/movie/upcoming?api_key=${process.env.API_KEY}&region=IN&page=${page}`
   )
     .then((response) => response.json())
     .then((result) => {
@@ -167,10 +154,9 @@ router.get(
   verifyToken,
   verifyLoginToken,
   (req, res) => {
-    const page = req.query.page;
+    const page = req.query.page || 1;
     fetch(
-      `https://api.themoviedb.org/3/movie/top_rated?api_key=${process.env.API_KEY}
-      &page=${page}&region=IN`
+      `https://api.themoviedb.org/3/movie/top_rated?api_key=${process.env.API_KEY}&page=${page}&region=IN`
     )
       .then((response) => response.json())
       .then((result) => {
@@ -199,10 +185,9 @@ router.get(
   '/movie/:movieId/related',
   (req, res) => {
     const movieId = req.params.movieId;
-    const page = req.query.page;
+    const page = req.query.page || 1 || 1;
     fetch(
-      `https://api.themoviedb.org/3/movie/${movieId}/similar?api_key=${process.env.API_KEY}
-      &page=${page}`
+      `https://api.themoviedb.org/3/movie/${movieId}/similar?api_key=${process.env.API_KEY}&page=${page}`
     )
       .then((response) => response.json())
       .then((result) => {
