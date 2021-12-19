@@ -33,38 +33,44 @@ function getGenreId(name) {
 }
 
 router.get('/search/:query', (req, res) => {
-  var name = req.params.query;
+  const page = req.query.page || 1;
+  const name = req.params.query;
   fetch(
-    `https://api.themoviedb.org/3/search/movie?api_key=${process.env.API_KEY}&language=en-US&query=${name}&region=IN`
+    `https://api.themoviedb.org/3/search/movie?api_key=${process.env.API_KEY}
+    &language=en-US&query=${name}&region=IN&page=${page}`
   )
     .then((response) => response.json())
     .then((result) => {
-      return res.status(200).send(result.results);
+      return res.status(200).send(result);
     })
     .catch((err) => console.log(err));
 });
 
 // verifyToken
 router.get('/trending', (req, res) => {
+  const page = req.query.page;
   fetch(
-    `https://api.themoviedb.org/3/trending/movie/day?api_key=${process.env.API_KEY}&region=IN`
+    `https://api.themoviedb.org/3/trending/movie/day?api_key=${process.env.API_KEY}
+    &region=IN&page=${page}`
   )
     .then((response) => response.json())
     .then((result) => {
-      return res.status(200).send(result.results);
+      return res.status(200).send(result);
     })
     .catch((err) => console.log(err));
 });
 
 router.get('/genre/:name', (req, res) => {
+  const page = req.query.page;
   let genre = req.params.name;
   const genreId = getGenreId(genre);
   fetch(
-    `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.API_KEY}&sort_by=popularity.desc&with_genres=${genreId}&region=IN`
+    `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.API_KEY}
+    &sort_by=popularity.desc&with_genres=${genreId}&region=IN&page=${page}`
   )
     .then((response) => response.json())
     .then((result) => {
-      return res.status(200).send(result.results);
+      return res.status(200).send(result);
     })
     .catch((err) => console.log(err));
 });
@@ -130,24 +136,28 @@ router.get(
   // verifyToken,
   // verifyLoginToken,
   (req, res) => {
+    const page = req.query.page;
     fetch(
-      `https://api.themoviedb.org/3/movie/now_playing?api_key=${process.env.API_KEY}&language=en-US&page=1&region=IN`
+      `https://api.themoviedb.org/3/movie/now_playing?api_key=${process.env.API_KEY}
+      &language=en-US&region=IN&page=${page}`
     )
       .then((response) => response.json())
       .then((result) => {
-        return res.status(200).send(result.results);
+        return res.status(200).send(result);
       })
       .catch((err) => console.log(err));
   }
 );
 
 router.get('/getmovies/upcoming', verifyToken, verifyLoginToken, (req, res) => {
+  const page = req.query.page;
   fetch(
-    `https://api.themoviedb.org/3/movie/upcoming?api_key=${process.env.API_KEY}&page=1&region=IN`
+    `https://api.themoviedb.org/3/movie/upcoming?api_key=${process.env.API_KEY}
+     &region=IN&page=${page}`
   )
     .then((response) => response.json())
     .then((result) => {
-      return res.status(200).send(result.results);
+      return res.status(200).send(result);
     })
     .catch((err) => console.log(err));
 });
@@ -157,12 +167,14 @@ router.get(
   verifyToken,
   verifyLoginToken,
   (req, res) => {
+    const page = req.query.page;
     fetch(
-      `https://api.themoviedb.org/3/movie/top_rated?api_key=${process.env.API_KEY}&page=1&region=IN`
+      `https://api.themoviedb.org/3/movie/top_rated?api_key=${process.env.API_KEY}
+      &page=${page}&region=IN`
     )
       .then((response) => response.json())
       .then((result) => {
-        return res.status(200).send(result.results);
+        return res.status(200).send(result);
       })
       .catch((err) => console.log(err));
   }
@@ -187,12 +199,14 @@ router.get(
   '/movie/:movieId/related',
   (req, res) => {
     const movieId = req.params.movieId;
+    const page = req.query.page;
     fetch(
-      `https://api.themoviedb.org/3/movie/${movieId}/similar?api_key=${process.env.API_KEY}`
+      `https://api.themoviedb.org/3/movie/${movieId}/similar?api_key=${process.env.API_KEY}
+      &page=${page}`
     )
       .then((response) => response.json())
       .then((result) => {
-        return res.status(200).send(result.results);
+        return res.status(200).send(result);
       })
       .catch((err) => console.log(err));
   }
