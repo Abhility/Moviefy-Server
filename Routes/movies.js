@@ -63,7 +63,7 @@ router.get('/genre/:name', (req, res) => {
   let genre = req.params.name;
   const genreId = getGenreId(genre);
   fetch(
-    `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.API_KEY}&sort_by=popularity.desc&with_genres=${genreId}&region=IN&page=${page}`
+    `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.API_KEY}&with_genres=${genreId}&region=IN&page=${page}`
   )
     .then((response) => response.json())
     .then((result) => {
@@ -185,7 +185,7 @@ router.get(
   '/movie/:movieId/related',
   (req, res) => {
     const movieId = req.params.movieId;
-    const page = req.query.page || 1 || 1;
+    const page = req.query.page || 1 ;
     fetch(
       `https://api.themoviedb.org/3/movie/${movieId}/similar?api_key=${process.env.API_KEY}&page=${page}`
     )
@@ -217,6 +217,22 @@ router.get(
           ))
           .filter(socialLink => !!socialLink.linkId);
 
+        return res.status(200).send(result);
+      })
+      .catch((err) => console.log(err));
+  }
+);
+
+router.get(
+  '/movie/:movieId/reviews',
+  (req, res) => {
+    const movieId = req.params.movieId;
+    const page = req.query.page || 1;
+    fetch(
+      `https://api.themoviedb.org/3/movie/${movieId}/reviews?api_key=${process.env.API_KEY}&page=${page}`
+    )
+      .then((response) => response.json())
+      .then((result) => {
         return res.status(200).send(result);
       })
       .catch((err) => console.log(err));
